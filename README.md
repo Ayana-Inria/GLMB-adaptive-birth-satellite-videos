@@ -1,2 +1,2 @@
 # GLMB-adaptive-birth-satellite-videos
-Codes will be uploaded upon publication of our paper "ADAPTIVE BIRTH FOR THE GLMB FILTER FOR OBJECT TRACKING IN SATELLITE VIDEOS" in MLSP 2022
+Codes will be uploaded upon publication of our paper "Adaptive Birth for the GLMB Filter for object tracking in satellite videos" in the IEEE MLSP 2022 conference
