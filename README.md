@@ -17,7 +17,7 @@ If you use this code, we strongly suggest you cite:
 
 |Traditional GLMB | AB-GLMB |
 |:--:| :--:|
-| <img src="glmb.gif"> | <img src="adaptive_birth.gif"> |
+| <img src="images/glmb.gif"> | <img src="images/adaptive_birth.gif"> |
 ### GLMB-with adaptive birth
 
 ### Contents
