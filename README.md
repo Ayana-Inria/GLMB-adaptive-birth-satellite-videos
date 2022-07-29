@@ -71,7 +71,7 @@ parameters['Po'] = 5    # Birth covariance
 
 #### Using AB-GLMB in your own project
 
-All the essential functions for our filter are located at the file src/filter/**glmb.py** file:
+All the essential functions for our filter are located at the src/filter/**glmb.py** file:
 
 ```python
 # python 3.6
