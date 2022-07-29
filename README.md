@@ -24,7 +24,7 @@ If you use this code, we strongly suggest you cite:
 ### Contents
 1. [Installation](#installation-sufficient-for-the-demo)
 2. [Usage](#usage)
-3. [Results Replication](#dataset)
+3. [Dataset Registration](#dataset)
 
 
 ### Installation
@@ -56,8 +56,62 @@ Demo outputs are saved under:
 ```
 
 
-### Data Structure
-To replicate
+#### Parameter Choice
+
+The GLMB filter relies on numerous parameters, but the most important ones are:
+
+```python
+# parameters.py
+parameters['tau'] = 1   # Sampling period
+parameters['Q'] = 10    # Motion covariance  
+parameters['R'] = 1     # Measurement covariance
+parameters['Po'] = 5    # Birth covariance
+```
+
+
+#### Using AB-GLMB in your own project
+
+All the essential functions for our filter are located at the file src/filter/**glmb.py** file:
+
+```python
+# python 3.6
+import src.filter.glmb as GLMB_FILTER
+
+# Fix filter parameters
+parameters = {}
+parameters['tau'] = 1   # Sampling period
+parameters['Q'] = 10    # Motion covariance  
+parameters['R'] = 1     # Measurement covariance
+parameters['Po'] = 5    # Birth covariance
+
+# Initialize Filter Model
+model = GLMB_FILTER.Model(parameters)
+
+# Create instance of GLMB
+glmb_update = GLMB_FILTER.glmb_instance()
+
+# Iterate over each frame
+    # get frame detections
+    zk = get_frame_detections(frame_number) # torch tensor with shape (n_objects_at_frame_k, n_dims). n_dims=4: [px, py, w, h]
+
+    # update GLMB
+    glmb_update = GLMB_FILTER.jointpredictupdate_a_birth(glmb_update, model,  zk, birth_field, frame_number)
+
+    # State Estimation
+    Xk = glmb_update.extract_estimates() # Xk is a dictionary of the form Xk[obj_label] = [px, py, vx, vy, w, h]
+
+
+```
+
+### Dataset
+#### Video Regisration
+1. Download the WPAFB 2009 dataset from the [AFRL's Sensor Data Management System (SDMS) website](https://www.sdms.afrl.af.mil/index.php?collection=wpafb2009)
+2. Convert the .ntf files to .png (we used Matlab's _nitfread_ function)
+3. Use our [video stabilization repository](https://github.com/Ayana-Inria/satellite-video-stabilization) to stabilize the sequence and format the labeling
+
+
+#### Data Structure
+To replicate the results shown in the paper, the DATASET needs to be formatted in the following way:
 ```
 [root for demo.py]
     └── WPAFB_2009/
@@ -86,59 +140,6 @@ To replicate
                 |     ├── labels_as_points_02.png
                 |     └── ...
                 └── object_states.csv
-
-
-
-```
-
-#### Using AB-GLMB in your own project
-
-You can use our code by adding the following lines of code:
-
-```python
-# python 3.6
-import src.filter.glmb as GLMB_FILTER_BASE
-import src.filter.adaptive_birth_glmb as ADAPTIVE_GLMB
-
-
-
-# Initialize Filter Parameters
-model = GLMB_FILTER_BASE.Model(parameters)
-filter_parameters = GLMB_FILTER_BASE.Filter(model)
-
-# Create instance of GLMB
-glmb_update = GLMB_FILTER_BASE.glmb_instance()
-glmb_update.w = torch.tensor([1])
-glmb_update.n = [0]
-glmb_update.cdn = [1]
-
-
-# get detections
-...
-
-# update GLMB
-glmb_update = ADAPTIVE_GLMB.jointpredictupdate_a_birth(glmb_update,
-                                                               model,
-                                                               filter_parameters,
-                                                               zk,
-                                                               birth_field,
-                                                               k)
-
-# track_bbs_ids is a np array where each row contains a valid bounding box and track_id (last column)
-...
-```
-
-#### Parameter Choice
-
-The GLMB filter relies on numerous parameters, but the most important ones are:
-
-```python
-# parameters.py
-parameters['tau'] = 1 # Sampling Frequency
-parameters['Q'] = 10    
-parameters['R'] = 1
-parameters['Po'] = 5 # birth covariance
-parameters["gating_distance"] = 30
 ```
 
 ### Aknowledgment
