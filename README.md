@@ -34,8 +34,7 @@ If you use this code, we strongly suggest you cite:
   git clone --recursive https://github.com/Ayana-Inria/GLMB-adaptive-birth-satellite-videos
   ```
 
-2.
-To install required dependencies run:
+2. To install required dependencies run:
 ```Shell
 $ conda env create -f ab_glmb.yml
 ```
