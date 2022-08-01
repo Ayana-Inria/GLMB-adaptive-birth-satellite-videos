@@ -17,7 +17,7 @@ If you use this code, we strongly suggest you cite:
 
 |Tracked Objects | Adaptive Birth Field |
 |:--:| :--:|
-| <img src="images/adaptive_birth.gif"> | <img src="images/birth_field.gif"> |
+| <img src="adaptive_birth.gif"> | <img src="birth_field.gif"> |
 
 ### GLMB-with adaptive birth
 
@@ -90,15 +90,27 @@ model = GLMB_FILTER.Model(parameters)
 # Create instance of GLMB
 glmb_update = GLMB_FILTER.glmb_instance()
 
+# Create birth field
+birth_field = torch.zeros((data_rows, data_cols, 3))
+
+# Create state list
+X = []
+
 # Iterate over each frame
     # get frame detections
     zk = get_frame_detections(frame_number) # torch tensor with shape (n_objects_at_frame_k, n_dims). n_dims=4: [px, py, w, h]
 
-    # update GLMB
+    # Update GLMB
     glmb_update = GLMB_FILTER.jointpredictupdate_a_birth(glmb_update, model,  zk, birth_field, frame_number)
 
     # State Estimation
     Xk = glmb_update.extract_estimates() # Xk is a dictionary of the form Xk[obj_label] = [px, py, vx, vy, w, h]
+
+    # Add frame state to state list
+    X.append(Xk)
+
+    # Update birth field
+    birth_field = update_birth_field(birth_field, X, frame_number)
 
 
 ```
@@ -114,32 +126,33 @@ glmb_update = GLMB_FILTER.glmb_instance()
 To replicate the results shown in the paper, the DATASET needs to be formatted in the following way:
 ```
 [root for demo.py]
-    └── WPAFB_2009/
-        └── AOI_02/
-            ├── INPUT_DATA/
-            |   ├── img01.png
-            |   ├── img02.png
-            |   └── ...
-            ├── GT/
-            |   ├── stabilized_oject_states.csv
-            |   └── labels/
-            |         ├── labels_as_points_01.png
-            |         ├── labels_as_points_02.png
-            |         └── ...
-            └── FILTER_OUTPUT/
-                ├── birth_field/
-                |     ├── birth_field_01.png
-                |     ├── birth_field_02.png
-                |     └── ...
-                ├── objects/
-                |     ├── tracked_objects_01.png
-                |     ├── tracked_objects_02.png
-                |     └── ...
-                ├── labels/
-                |     ├── labels_as_points_01.png
-                |     ├── labels_as_points_02.png
-                |     └── ...
-                └── object_states.csv
+└──dataset
+      └── WPAFB_2009/
+            └── AOI_02/
+                ├── INPUT_DATA/
+                |   ├── img01.png
+                |   ├── img02.png
+                |   └── ...
+                ├── GT/
+                |   ├── stabilized_oject_states.csv
+                |   └── labels/
+                |         ├── labels_as_points_01.png
+                |         ├── labels_as_points_02.png
+                |         └── ...
+                └── FILTER_OUTPUT/
+                    ├── birth_field/
+                    |     ├── birth_field_01.png
+                    |     ├── birth_field_02.png
+                    |     └── ...
+                    ├── objects/
+                    |     ├── tracked_objects_01.png
+                    |     ├── tracked_objects_02.png
+                    |     └── ...
+                    ├── labels/
+                    |     ├── labels_as_points_01.png
+                    |     ├── labels_as_points_02.png
+                    |     └── ...
+                    └── object_states.csv
 ```
 
 ### Aknowledgment
