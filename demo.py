@@ -39,13 +39,16 @@ def main():
     print("Starting Filter")
     filter_fn.perform_adaptive_birth_glmb_filter(parameters)
 
-    # TRAJECTORy Plotting
-    print("Saving Ground Truth Trajectories")
-    data_reader.save_detection_with_trajecories_smart(parameters, GT_trajectories=True, trajectory_length=8)
     
     print("Saving Filter Trajectories")
     data_reader.save_detection_with_trajecories_smart(parameters, GT_trajectories=False, trajectory_length=8)
 
+    # Trajectory Plotting
+    print("Saving Ground Truth Trajectories")
+    try:
+        data_reader.save_detection_with_trajecories_smart(parameters, GT_trajectories=True, trajectory_length=8)
+    except IndexError:
+        print("Need all 512 images to plot all the gt trajectories")
 
     # METRICS
     print("Calculating Metrics")
