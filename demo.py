@@ -36,12 +36,12 @@ def main():
     parameters = get_dataset_parameters(AOI_number=2)
 
     # FILTER
-    # print("Starting Filter")
-    # filter_fn.perform_adaptive_birth_glmb_filter(parameters)
+    print("Starting Filter")
+    filter_fn.perform_adaptive_birth_glmb_filter(parameters)
 
     # TRAJECTORy Plotting
     print("Saving Ground Truth Trajectories")
-    # data_reader.save_detection_with_trajecories_smart(parameters, GT_trajectories=True, trajectory_length=8)
+    data_reader.save_detection_with_trajecories_smart(parameters, GT_trajectories=True, trajectory_length=8)
     
     print("Saving Filter Trajectories")
     data_reader.save_detection_with_trajecories_smart(parameters, GT_trajectories=False, trajectory_length=8)

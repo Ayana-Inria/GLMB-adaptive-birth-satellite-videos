@@ -17,12 +17,12 @@ If you use this code, we strongly suggest you cite:
 
 |Tracked Objects | Adaptive Birth Field |
 |:--:| :--:|
-| <img src="adaptive_birth.gif"> | <img src="birth_field.gif"> |
+| <img src="dataset/WPAFB_2009/AOI_02/adaptive_birth.gif"> | <img src="dataset/WPAFB_2009/AOI_02/birth_field.gif"> |
 
 ### GLMB-with adaptive birth
 
 ### Contents
-1. [Installation](#installation-sufficient-for-the-demo)
+1. [Installation](#Installation)
 2. [Usage](#usage)
 3. [Dataset Registration](#dataset)
 
@@ -37,10 +37,17 @@ If you use this code, we strongly suggest you cite:
 2.
 To install required dependencies run:
 ```Shell
-$ pip install -r requirements.txt
+$ conda env create -f ab_glmb.yml
 ```
-
-
+Required libraries
+```Shell
+- numpy=1.22
+- pytorch=1.12
+- opencv=4.5
+- pillow=9.0
+- matplotlib=3.5
+- motmetrics=1.2
+```
 
 ### Usage
 
